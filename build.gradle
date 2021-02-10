@@ -231,34 +231,40 @@ subprojects {
     }
 }
 
+def nativeClassesDirectory = "${project.rootDir.absolutePath}/graphql-native/build/classes"
+def ballerinaJarsDirectory = "${project.rootDir.absolutePath}/graphql-ballerina/target/cache/ballerina/graphql/0.1.3/java11"
+def executeDataDirectory = "${project.rootDir.absolutePath}/graphql-ballerina/target/cache/tests_cache/coverage/ballerina.exec"
+def classesDirectory = "${project.rootDir.absolutePath}/build/classes"
 
+task copyJavaClassFiles(type: Copy) {
+    from(nativeClassesDirectory) {
+        include '**/*.class'
+        exclude 'module-info.class'
+    }
+    into classesDirectory
+}
 
-
-// def jacocoDirectory = def artifactCodeCoverageReport = file("$project.projectDir/target/cache/tests_cache/coverage/ballerina.exec")
-def classesDirectory = "${project.rootDir.absolutePath}/graphql-native/build/classes"
-
-// task codeCoverageReport(type: JacocoReport) {
-//     executionData fileTree("${jacocoDirectory}").matching {
-//         include "**.exec"
-//     }
-//     additionalClassDirs files("${classesDirectory}")
-//     reports {
-//         html.enabled true
-//     }
-// }
-
-task codeCoverageReport(type: JacocoReport) {
-    println("Generating report.xml")
-    println(project.rootDir.absolutePath)
-    println(buildDir)
-    executionData fileTree(project.rootDir.absolutePath).include("**/target/cache/tests_cache/coverage/ballerina.exec")
-    
-    subprojects.each {
-        sourceSets it.sourceSets.main
+task extractBallerinaClassFiles(type: Copy) {
+    def jars = fileTree(ballerinaJarsDirectory).findAll {
+         it.name.endsWith("-testable.jar")
     }
 
-    // additionalClassDirs files("${classesDirectory}")
+    jars.forEach { file ->
+        println(file.name)
+        from zipTree(file).matching {
+            include '**/*.class'
+        }
+        into "${classesDirectory}"
+    }
+}
 
+task codeCoverageReport(type: JacocoReport) {
+    dependsOn(copyJavaClassFiles)
+    dependsOn(extractBallerinaClassFiles)
+    println("Generating report.xml")
+    executionData executeDataDirectory
+    
+    additionalClassDirs files("${classesDirectory}")
 
     reports {
         xml.enabled = true
@@ -266,6 +272,8 @@ task codeCoverageReport(type: JacocoReport) {
         xml.destination = new File("${buildDir}/reports/jacoco/report.xml")
         html.destination = new File("${buildDir}/reports/jacoco/report.html")
     }
+
+    println("reports generated")
 
     onlyIf = {
         true
