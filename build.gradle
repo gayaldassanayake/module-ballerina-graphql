@@ -20,6 +20,7 @@ plugins {
     id 'com.github.johnrengelman.shadow'
     id 'de.undercouch.download'
     id 'net.researchgate.release'
+    id 'jacoco'
 }
 
 allprojects {
@@ -227,5 +228,46 @@ subprojects {
             // To release from any branch
             requireBranch = null
         }
+    }
+}
+
+
+
+
+// def jacocoDirectory = def artifactCodeCoverageReport = file("$project.projectDir/target/cache/tests_cache/coverage/ballerina.exec")
+def classesDirectory = "${project.rootDir.absolutePath}/graphql-native/build/classes"
+
+// task codeCoverageReport(type: JacocoReport) {
+//     executionData fileTree("${jacocoDirectory}").matching {
+//         include "**.exec"
+//     }
+//     additionalClassDirs files("${classesDirectory}")
+//     reports {
+//         html.enabled true
+//     }
+// }
+
+task codeCoverageReport(type: JacocoReport) {
+    println("Generating report.xml")
+    println(project.rootDir.absolutePath)
+    println(buildDir)
+    executionData fileTree(project.rootDir.absolutePath).include("**/target/cache/tests_cache/coverage/ballerina.exec")
+    
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    // additionalClassDirs files("${classesDirectory}")
+
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+        xml.destination = new File("${buildDir}/reports/jacoco/report.xml")
+        html.destination = new File("${buildDir}/reports/jacoco/report.html")
+    }
+
+    onlyIf = {
+        true
     }
 }
