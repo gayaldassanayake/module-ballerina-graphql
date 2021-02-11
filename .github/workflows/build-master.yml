@@ -20,7 +20,7 @@ jobs:
                     packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
                     packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
                 run: |
-                    ./gradlew build --no-daemon
+                    ./gradlew build codeCoverageReport --no-daemon
             -   name: Archive Error Log
                 uses: actions/upload-artifact@v2
                 if: failure()
@@ -28,9 +28,9 @@ jobs:
                     name: Ballerina Internal Log
                     path: graphql-ballerina/ballerina-internal.log
                     if-no-files-found: ignore
-            -   name: Generate Jacoco Report
-                run: |
-                    ./gradlew codeCoverageReport
+            # -   name: Generate Jacoco Report
+            #     run: |
+            #         ./gradlew codeCoverageReport
             -   name: Generate CodeCov Report
                 uses: codecov/codecov-action@v1
                 with:
