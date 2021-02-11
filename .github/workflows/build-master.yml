@@ -30,7 +30,7 @@ jobs:
                     if-no-files-found: ignore
             -   name: Generate CodeCov Report
                 uses: codecov/codecov-action@v1
-                with: Generate CodeCov Report
+                with:
                     token: ${{ secrets.CODECOV_TOKEN }}
                     name: codecov-report
                     files: ./report.xml
