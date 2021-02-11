@@ -34,7 +34,6 @@ hs_err_pid*
 .gradle
 target
 build
-!build/reports/jacoco/.xml
 
 # Ballerina
 velocity.log*
