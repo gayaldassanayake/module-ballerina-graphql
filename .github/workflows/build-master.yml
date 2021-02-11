@@ -1,12 +1,7 @@
 name: Build
 
 on:
-    repository_dispatch:
-        types: [ stdlib-publish-snapshot ]
     push:
-        branches:
-            - master
-    workflow_dispatch:
 
 jobs:
     build:
@@ -33,6 +28,13 @@ jobs:
                     name: Ballerina Internal Log
                     path: graphql-ballerina/ballerina-internal.log
                     if-no-files-found: ignore
+            -   name: Generate CodeCov Report
+                uses: codecov/codecov-action@v1
+                with: Generate CodeCov Report
+                    token: ${{ secrets.CODECOV_TOKEN }}
+                    name: codecov-report
+                    files: ./report.xml
+                    directory: ./reports/jacoco/
             -   name: Archive Code Coverage JSON
                 uses: actions/upload-artifact@v2
                 with:
