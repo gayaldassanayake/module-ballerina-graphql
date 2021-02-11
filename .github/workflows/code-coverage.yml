@@ -8,3 +8,4 @@ jobs:
                 with:
                     token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
                     name: codecov-report
+                    files: ./reports/jacoco/reports.xml
