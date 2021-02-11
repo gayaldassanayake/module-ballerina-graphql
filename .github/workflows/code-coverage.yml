@@ -3,7 +3,7 @@ on: [ push ]
 jobs:
     runs-on: ubuntu-latest
         steps:
-        - uses: codecov/codecov-action@v1
-          with:
-            token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-            name: codecov-report
+          -   uses: codecov/codecov-action@v1
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+                  name: codecov-report
