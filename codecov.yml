@@ -1,3 +1,5 @@
-# fixes:
-#   - "ballerina/graphql/0_1_3/::"  # move path of graphql
-#   - "ballerina/graphql$0046parser/0_1_3/::modules/parser/"   # move path of graphql module - parser
+fixes:
+  - "ballerina/graphql/*/::graphql-ballerina/"  # move path of graphql
+  - "ballerina/graphql$0046parser/*::graphql-ballerina/modules/parser"   # move path of graphql module - parser
+
+  
