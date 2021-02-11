@@ -260,8 +260,8 @@ task extractBallerinaClassFiles(type: Copy) {
 }
 
 task codeCoverageReport(type: JacocoReport) {
-    dependsOn(copyJavaClassFiles)
-    dependsOn(extractBallerinaClassFiles)
+    // dependsOn(copyJavaClassFiles)
+    // dependsOn(extractBallerinaClassFiles)
     executionData executeDataDirectory
     
     additionalClassDirs files("${classesDirectory}")
