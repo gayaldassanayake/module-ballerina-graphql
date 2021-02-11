@@ -238,8 +238,8 @@ def classesDirectory = "${project.rootDir.absolutePath}/build/classes"
 
 task copyJavaClassFiles(type: Copy) {
     from(nativeClassesDirectory) {
-        include '**/*.class'
         exclude 'module-info.class'
+        include '**/*.class'
     }
     into classesDirectory
 }
@@ -252,6 +252,7 @@ task extractBallerinaClassFiles(type: Copy) {
     jars.forEach { file ->
         println(file.name)
         from zipTree(file).matching {
+            exclude '**/tests/*'
             include '**/*.class'
         }
         into "${classesDirectory}"
@@ -261,7 +262,6 @@ task extractBallerinaClassFiles(type: Copy) {
 task codeCoverageReport(type: JacocoReport) {
     dependsOn(copyJavaClassFiles)
     dependsOn(extractBallerinaClassFiles)
-    println("Generating report.xml")
     executionData executeDataDirectory
     
     additionalClassDirs files("${classesDirectory}")
@@ -272,8 +272,6 @@ task codeCoverageReport(type: JacocoReport) {
         xml.destination = new File("${buildDir}/reports/jacoco/report.xml")
         html.destination = new File("${buildDir}/reports/jacoco/report.html")
     }
-
-    println("reports generated")
 
     onlyIf = {
         true
