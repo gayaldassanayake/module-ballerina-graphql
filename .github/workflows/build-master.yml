@@ -33,7 +33,7 @@ jobs:
                 with:
                     token: ${{ secrets.CODECOV_TOKEN }}
                     name: codecov-report
-                    files: ./build/reports/jacoco/report.xml
+                    files: ./reports/jacoco/report.xml
             -   name: Archive Code Coverage JSON
                 uses: actions/upload-artifact@v2
                 with:
