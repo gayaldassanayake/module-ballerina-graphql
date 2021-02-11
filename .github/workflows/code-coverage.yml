@@ -1,3 +1,5 @@
+name: Code Coverage
+
 on: [ push ]
 
 jobs:
@@ -8,4 +10,4 @@ jobs:
                 with:
                     token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
                     name: codecov-report
-                    files: ./reports/jacoco/reports.xml
+                    files: ./reports/jacoco/report.xml
