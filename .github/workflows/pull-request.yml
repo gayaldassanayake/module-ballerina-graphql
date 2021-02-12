@@ -31,9 +31,9 @@ jobs:
                     if-no-files-found: ignore
             -   name: Generate Codecov Report
                 uses: codecov/codecov-action@v1
-                with:
-                    token: ${{ secrets.CODECOV_TOKEN }}
-                    name: codecov-report
+                # with:
+                #     token: ${{ secrets.CODECOV_TOKEN }}
+                #     name: codecov-report
 
     windows-build:
         runs-on: windows-latest
