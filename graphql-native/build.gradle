@@ -19,13 +19,19 @@ plugins {
     id 'java'
     id 'checkstyle'
     id 'com.github.spotbugs'
+    id 'jacoco'
 }
 
 description = 'Ballerina - GraphQL Native'
 
+configurations {
+    jacocoRuntime
+}
+
 dependencies {
     checkstyle project(':build-config:checkstyle')
     checkstyle "com.puppycrawl.tools:checkstyle:${checkstylePluginVersion}"
+    jacocoRuntime "org.jacoco:org.jacoco.agent:${jacoco.toolVersion}:runtime"
 
     compile group: 'org.ballerinalang', name: 'ballerina-lang', version: "${ballerinaLangVersion}"
     compile group: 'org.ballerinalang', name: 'ballerina-runtime', version: "${ballerinaLangVersion}"
@@ -43,6 +49,24 @@ checkstyle {
 }
 
 checkstyleMain.dependsOn(":build-config:checkstyle:downloadMultipleFiles")
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+test {
+    testLogging {
+        showStackTraces = true
+        showStandardStreams = true
+        events "failed"
+        exceptionFormat "full"
+    }
+    jacoco {
+        enabled = true
+        destinationFile = file("$buildDir/coverage-reports/jacoco.exec")
+        includeNoLocationClasses = true
+    }
+}
 
 spotbugsMain {
     effort "max"
@@ -69,4 +93,12 @@ compileJava {
         ]
         classpath = files()
     }
+}
+
+task copyJavaClassFiles(type: Copy) {
+    from("${project.buildDir}/classes") {
+        exclude '**/module-info.class'
+        include '**/*.class'
+    }
+    into "${project.rootDir.absolutePath}/build/classes"
 }

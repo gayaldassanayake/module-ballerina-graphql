@@ -15,6 +15,10 @@
  *
  */
 
+ plugins {
+    id 'jacoco'
+}
+
 import org.apache.tools.ant.taskdefs.condition.Os
 
 description = 'Ballerina - GraphQl Ballerina'
@@ -253,6 +257,20 @@ publishing {
                 password = System.getenv("packagePAT")
             }
         }
+    }
+}
+
+task extractBallerinaClassFiles(type: Copy) {
+    def jars = fileTree(artifactTestableJar).findAll {
+         it.name.endsWith("-testable.jar")
+    }
+
+    jars.forEach { file ->
+        from zipTree(file).matching {
+            exclude '**/tests/*'
+            include '**/*.class'
+        }
+        into "${project.rootDir.absolutePath}/build/classes"
     }
 }
 
