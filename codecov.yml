@@ -1,6 +1,5 @@
 fixes:
-  - "ballerina/graphql/*/::graphql-ballerina/"  # move path of graphql
-  - "ballerina/graphql$0046parser/*::graphql-ballerina/modules/parser"   # move path of graphql module - parser
-  # - "ballerina/graphql/0_1_3/$_string_constants.class::ballerina/graphql/0_1_3/constants.class"
+  - "ballerina/graphql/*/::graphql-ballerina/"
+  - "ballerina/graphql$0046parser/*::graphql-ballerina/modules/parser"
 ignore:
-  - "**/test"   # ignore test files
+  - "**/test"

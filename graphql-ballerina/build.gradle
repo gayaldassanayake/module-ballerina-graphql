@@ -260,6 +260,20 @@ publishing {
     }
 }
 
+task extractBallerinaClassFiles(type: Copy) {
+    def jars = fileTree(artifactTestableJar).findAll {
+         it.name.endsWith("-testable.jar")
+    }
+
+    jars.forEach { file ->
+        from zipTree(file).matching {
+            exclude '**/tests/*'
+            include '**/*.class'
+        }
+        into "${project.rootDir.absolutePath}/build/classes"
+    }
+}
+
 unpackStdLibs.dependsOn unpackJballerinaTools
 copyStdlibs.dependsOn unpackStdLibs
 updateTomlFile.dependsOn copyStdlibs
@@ -278,25 +292,3 @@ ballerinaBuild.finalizedBy revertTomlFile
 build.dependsOn ballerinaBuild
 
 createTestableJarZip.dependsOn ballerinaBuild
-
-// task codeCoverageReport(type: JacocoReport) {
-//     println("Generating report.xml")
-//     println(project.rootDir.absolutePath)
-//     println(buildDir)
-//     executionData (artifactCodeCoverageReport)
-//     // subprojects.each {
-//     //     sourceSets it.sourceSets.main
-//     //     apply plugin: 'jacoco'
-//     // }
-
-//     reports {
-//         xml.enabled = true
-//         html.enabled = true
-//         xml.destination = new File("${buildDir}/reports/jacoco/report.xml")
-//         html.destination = new File("${buildDir}/reports/jacoco/report.html")
-//     }
-
-//     onlyIf = {
-//         true
-//     }
-// }
