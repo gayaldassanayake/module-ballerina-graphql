@@ -28,21 +28,18 @@ jobs:
                     name: Ballerina Internal Log
                     path: graphql-ballerina/ballerina-internal.log
                     if-no-files-found: ignore
-            # -   name: Generate Jacoco Report
-            #     run: |
-            #         ./gradlew codeCoverageReport
-            -   name: Generate CodeCov Report
-                uses: codecov/codecov-action@v1
-                with:
-                    token: ${{ secrets.CODECOV_TOKEN }}
-                    name: codecov-report
-                    # files: ./build/reports/jacoco/report.xml
             -   name: Archive Code Coverage JSON
                 uses: actions/upload-artifact@v2
                 with:
                     name: Code Coverage JSON
                     path: graphql-ballerina/target/report/test_results.json
                     if-no-files-found: ignore
+            -   name: Generate CodeCov Report
+                uses: codecov/codecov-action@v1
+                with:
+                    token: ${{ secrets.CODECOV_TOKEN }}
+                    name: codecov-report
+                    # files: ./build/reports/jacoco/report.xml
             -   name: Dispatch Dependent Module Builds
                 if: github.event.action != 'stdlib-publish-snapshot'
                 run: |
